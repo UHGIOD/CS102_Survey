@@ -210,12 +210,8 @@ overall <- final_combined_data %>%
             Standard_Dev = mean(Standard_Dev),
   )
 
-overall_summary<- bind_rows(final_combined_data, overall)
-overall_summary[25, 1] <- "OVERALL RESULT"
-overall_summary[25, 2] <-  "OVERALL SUMMARY"
-View(overall_summary)
-
-stats_factors <- bind_rows(final_combined_data, overall_summary)
-View(stats_factors)
-stats_factors
-
+stats_overall<- bind_rows(final_combined_data, overall)
+stats_overall[25, 1] <- "OVERALL RESULT"
+stats_overall[25, 2] <-  "OVERALL SUMMARY"
+View(stats_overall)
+stats_overall
