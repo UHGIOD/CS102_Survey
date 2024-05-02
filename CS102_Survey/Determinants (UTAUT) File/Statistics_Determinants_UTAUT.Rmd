@@ -203,7 +203,7 @@ FC_all
 #Behavioral Intention Questionnaire
 #X29...I.intend.to.use.the.messaging.system.in.the.future.
 #X30...I.predict.I.would.use.the.messaging.system.in.the.future.
-#X31...I.plan.to.use.the.messaging.system.in.the.next.future.
+#X31...I.plan.to.use.the.messaging.system.in.the.next.future. 
 
 #Getting the mean and standard deviation
 
