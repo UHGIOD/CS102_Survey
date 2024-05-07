@@ -2,7 +2,7 @@ library(readr)
 library(dplyr)
 library(tidyr)
 
-messRespon<-read.csv('C:/Users/User/Documents/Rstudio Files/midtermsurvey/FINAL EXCEL/RESPONDENTS.csv')
+messRespon<-read.csv('/cloud/project/CS102_Survey/RESPONDENTS.csv')
 
                   #GRAPHING DEMOGRAPHICS UTILIZED IN THE SURVEY
 
