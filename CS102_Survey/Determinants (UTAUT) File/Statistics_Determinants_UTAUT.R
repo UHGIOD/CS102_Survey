@@ -2,10 +2,9 @@ library(readr)
 library(dplyr)
 library(tidyr)
 
-messRespon<-read.csv('/cloud/project/CS102_Survey/RESPONDENTS.csv')
+messRespon<-read.csv('C:/Users/User/Documents/Rstudio Files/midtermsurvey/FINAL EXCEL/RESPONDENTS.csv')
 
-                              #FACTORS AND THEIR MEAN AND STANDARD DEVIATION
-
+#FACTORS AND THEIR MEAN AND STANDARD DEVIATION
 
 #FACTOR: PERFORMANCE EXPECTANCY
 
@@ -18,7 +17,7 @@ messRespon<-read.csv('/cloud/project/CS102_Survey/RESPONDENTS.csv')
 #Getting the Mean and Standard Deviation of the Performance Expectancy (PE) 
 PE_meanstd <- messRespon %>%
   summarise(
-    Factors = c("U6", "RA1", "RA5", "OE7"),
+    Code = c("U6", "RA1", "RA5", "OE7"),
     Mean = c(
       mean(X1....I.find.the.messaging.system.useful.in.terms.of.communication.),
       mean(X2...Using.the.messaging.system.enables.me.to.communicate.efficiently.),
@@ -32,8 +31,8 @@ PE_meanstd <- messRespon %>%
       sd(X4...If.I.use.the.messaging.system..I.will.increase.my.chances.of.online.interaction.)
     )
   ) %>%
-  mutate(Questionnaire_Type = "Performance Expectancy") %>%
-  select(Questionnaire_Type,Factors, Mean, Standard_Dev)
+  mutate(Factors = "Performance Expectancy") %>%
+  select(Factors,Code, Mean, Standard_Dev)
 
 TotalresultPE <- PE_meanstd %>%
   summarise(Mean = mean(Mean),
@@ -44,6 +43,7 @@ PE_all<- bind_rows(PE_meanstd, TotalresultPE)
 PE_all[5, 1] <- "PERFORMANCE EXPECTANCY"
 PE_all[5, 2] <-  "TOTAL"
 View(PE_all)
+
 PE_all
 
 
@@ -58,7 +58,7 @@ PE_all
 #Getting the mean and Standard Deviation
 EE_meanstd <- messRespon %>%
   summarise(
-    Factors = c("EOU3", "EOU5", "EOU6", "EU4"),
+    Code = c("EOU3", "EOU5", "EOU6", "EU4"),
     Mean = c(
       mean(X5..My.interaction.with.the.messaging.system.is..clear.and.understandable.),
       mean(X6..It.is.easy.for.me.to.become.skillful.at.using.the.messaging.system.),
@@ -72,8 +72,8 @@ EE_meanstd <- messRespon %>%
       sd(X8..Learning.to.operate.the.messaging.system.is.easy.for.me.)
     )
   ) %>%
-  mutate(Questionnaire_Type = "Effort Expectancy") %>%
-  select(Questionnaire_Type,Factors, Mean, Standard_Dev)
+  mutate(Factors = "Effort Expectancy") %>%
+  select(Factors, Code, Mean, Standard_Dev)
 
 TotalresultEE <- EE_meanstd %>%
   summarise(Mean = mean(Mean),
@@ -84,6 +84,7 @@ EE_all<- bind_rows(EE_meanstd, TotalresultEE)
 EE_all[5, 1] <- "EFFORT EXPECTANCY"
 EE_all[5, 2] <-  "TOTAL"
 View(EE_all)
+
 EE_all
 
 #FACTOR: SOCIAL INFLUENCE
@@ -97,7 +98,7 @@ EE_all
 #Getting the mean and standard deviation
 SI_meanstd <- messRespon  %>%
   summarise(
-    Factors = c("SN1", "SN2","SF2","SF4"),
+    Code = c("SN1", "SN2","SF2","SF4"),
     Mean = c(
       mean(X13..People.who.influence.my.behavior.think.that.I.should.use.the.messaging.system.),
       mean(X14...People.who.are.important.to.me.think.that.I.should.use.the.messaging.system.),
@@ -111,8 +112,8 @@ SI_meanstd <- messRespon  %>%
       sd(X16..In.general..the.organization.has.supported.the.use.of.the.messaging.system.)
     )
   ) %>%
-  mutate(Questionnaire_Type = "Social Influence") %>%
-  select(Questionnaire_Type, Factors, Mean, Standard_Dev)
+  mutate(Factors = "Social Influence") %>%
+  select(Factors,Code, Mean, Standard_Dev)
 
 TotalresultSI <- SI_meanstd %>%
   summarise(Mean = mean(Mean),
@@ -123,8 +124,8 @@ SI_all<- bind_rows(SI_meanstd, TotalresultSI)
 SI_all[5, 1] <- "SOCIAL INFLUENCE"
 SI_all[5, 2] <-  "TOTAL"
 View(SI_all)
-SI_all
 
+SI_all
 
 #FACTOR: FACILITATING CONDITIONS
 
@@ -137,7 +138,7 @@ SI_all
 #Getting the mean and standard deviation
 FC_meanstd <- messRespon  %>%
   summarise(
-    Factors = c("SN1", "SN2","SF2","SF4"),
+    Code = c("PBC2", "PBC3","PBC5","FC3"),
     Mean = c(
       mean(X17...I.have.the.resources.necessary.to.use.the.messaging.system.),
       mean(X18..I.have.the.knowledge.necessary.to.use.the.messaging.system.),
@@ -151,67 +152,72 @@ FC_meanstd <- messRespon  %>%
       sd(X20...A.specific.person..or.group..is.available.for.assistance.with.messaging.system.difficulties.)
     )
   ) %>%
-  mutate(Questionnaire_Type = "Facilitating Conditions") %>%
-  select(Questionnaire_Type, Factors, Mean, Standard_Dev)
+  mutate(Factors = "Facilitating Conditions") %>%
+  select(Factors, Code, Mean, Standard_Dev)
 
 TotalresultFC <- FC_meanstd %>%
   summarise(Mean = mean(Mean),
             Standard_Dev = mean(Standard_Dev),
   )
 
-FC_all<- bind_rows(FC_meanstd, TotalresultSI)
+FC_all<- bind_rows(FC_meanstd, TotalresultFC)
 FC_all[5, 1] <- "FACILITATING CONDITIONS"
 FC_all[5, 2] <-  "TOTAL"
 View(FC_all)
+
 FC_all
 
-#FACTOR: BEHAVIORAL INTENTION TO USE THE SYSTEM 
 
-#Behavioral Intention Questionnaire
-#X29...I.intend.to.use.the.messaging.system.in.the.future.
-#X30...I.predict.I.would.use.the.messaging.system.in.the.future.
-#X31...I.plan.to.use.the.messaging.system.in.the.next.future.
+#Combining all the factors to acquire the Behavioral Intention 
 
-#Getting the mean and standard deviation
+#THE BEHAVIORAL INTENTION OF THE DETERMINANTS
 
-BI_meanstd <- messRespon %>%
-  summarise(
-    Factors = c("BI1", "BI2", "BI3"),
-    Mean = c(
-      mean(X29...I.intend.to.use.the.messaging.system.in.the.future.),
-      mean(X30...I.predict.I.would.use.the.messaging.system.in.the.future.),
-      mean(X31...I.plan.to.use.the.messaging.system.in.the.next.future.)
-    ),
-    Standard_Dev = c(
-      sd(X29...I.intend.to.use.the.messaging.system.in.the.future.),
-      sd(X30...I.predict.I.would.use.the.messaging.system.in.the.future.),
-      sd(X31...I.plan.to.use.the.messaging.system.in.the.next.future.)
-    )
-  ) %>%
-  mutate(Questionnaire_Type = "Behavioral Intention") %>%
-  select(Questionnaire_Type,Factors, Mean, Standard_Dev)
+#Binding all the factors, codes, mean, and standard deviation of each of the determinants. 
 
-TotalresultBI <- BI_meanstd %>%
-  summarise(Mean = mean(Mean),
-            Standard_Dev = mean(Standard_Dev),
-  )
-BI_all<- bind_rows(BI_meanstd, TotalresultBI)
-BI_all[4, 1] <- "BEHAVIORAL INTENTION"
-BI_all[4, 2] <-  "TOTAL"
-View(BI_all)
-BI_all
+behavioral_com_data<- bind_rows(PE_all, EE_all, SI_all, FC_all)
+View(behavioral_com_data)
 
-
-final_combined_data <- bind_rows(PE_all, EE_all, SI_all, FC_all, BI_all)
-View(final_combined_data)
-
-overall <- final_combined_data %>%
+#Getting all the overall mean and standard deviation. 
+overall <- behavioral_com_data%>%
   summarise(Mean = mean(Mean),
             Standard_Dev = mean(Standard_Dev),
   )
 
-stats_overall<- bind_rows(final_combined_data, overall)
-stats_overall[25, 1] <- "OVERALL RESULT"
-stats_overall[25, 2] <-  "OVERALL SUMMARY"
-View(stats_overall)
-stats_overall
+#Creating a table of accumulated data
+behavioral_intention_final<-bind_rows(behavioral_com_data, overall)
+behavioral_intention_final[21, 1] <- "BEHAVIORAL INTENTION"
+behavioral_intention_final[21, 2] <- "TOTAL"
+View(behavioral_intention_final)
+behavioral_intention_final
+
+
+#TABLE FOR THE OVERALL RESULTS
+#Creating a table for all the results of all the factors. 
+PE<-behavioral_intention_final[5, 2:4]
+EE<-behavioral_intention_final[10, 2:4]
+SI<-behavioral_intention_final[15, 2:4]
+FC<-behavioral_intention_final[20, 2:4]
+total<-behavioral_intention_final[21, 2:4]
+
+Overall_deter<-bind_rows(PE, EE, SI, FC, total)
+
+#Renaming the Column
+Overall_deter[1,1]<-"PE"
+Overall_deter[2,1]<-"EE"
+Overall_deter[3,1]<-"SI"
+Overall_deter[4,1]<-"FC"
+
+View(Overall_deter)
+Overall_deter
+
+
+#Add Description column
+Description <- c("Performance Expectancy", "Effort Expectancy", "Social Influence", "Facilitating Conditions", "TOTAL")
+#Mutating the description column and renaming the title of the column. 
+Overall_deter <- Overall_deter%>%
+  mutate(Description = Description)%>%
+  select(Code, Description, everything())%>%
+  rename(Mean_SD = Standard_Dev)
+
+View(Overall_deter)
+Overall_deter

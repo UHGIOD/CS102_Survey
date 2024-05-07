@@ -17,7 +17,7 @@ library(tidyr)
 ```
 ```{r}
 #Reading the file from csv for easy navigation. 
-messRespon<-read.csv('/cloud/project/CS102_Survey/RESPONDENTS.csv')
+messRespon<-read.csv('C:/Users/User/Documents/Rstudio Files/midtermsurvey/FINAL EXCEL/RESPONDENTS.csv')
 ```
 
 ```{r}
@@ -38,7 +38,7 @@ messRespon<-read.csv('/cloud/project/CS102_Survey/RESPONDENTS.csv')
 #Getting the Mean and Standard Deviation of the Performance Expectancy (PE) 
 PE_meanstd <- messRespon %>%
   summarise(
-    Factors = c("U6", "RA1", "RA5", "OE7"),
+    Code = c("U6", "RA1", "RA5", "OE7"),
     Mean = c(
       mean(X1....I.find.the.messaging.system.useful.in.terms.of.communication.),
       mean(X2...Using.the.messaging.system.enables.me.to.communicate.efficiently.),
@@ -52,8 +52,8 @@ PE_meanstd <- messRespon %>%
       sd(X4...If.I.use.the.messaging.system..I.will.increase.my.chances.of.online.interaction.)
     )
   ) %>%
-  mutate(Questionnaire_Type = "Performance Expectancy") %>%
-  select(Questionnaire_Type,Factors, Mean, Standard_Dev)
+  mutate(Factors = "Performance Expectancy") %>%
+  select(Factors,Code, Mean, Standard_Dev)
  
 TotalresultPE <- PE_meanstd %>%
   summarise(Mean = mean(Mean),
@@ -64,10 +64,10 @@ PE_all<- bind_rows(PE_meanstd, TotalresultPE)
 PE_all[5, 1] <- "PERFORMANCE EXPECTANCY"
 PE_all[5, 2] <-  "TOTAL"
 View(PE_all)
+
+#Viewing of the 1st subset: The Performance Expectancy 
 PE_all
-
-#INSIGHTS: The data shows that "Performance Expectancy" has a mean score range from 3.86 to 4.70 across various factors, with U6 scoring the highest,in which they find the messaging platforms useful in terms of communication. In standard deviation, ranging from 0.77 to 0.92, suggesting a moderate variation in responses across different factors, with RA5 showing the highest variability.
-
+#DESCRIPTION: Base on the subset, the questionnaire U6 has the highest average among the 4 questionnaires, this indicates that the respondents find the messaging application useful in terms of communication. The RA5 questionnaire has the lowest mean indicating that it causes a non-productive event on the user, meaning they waste their time using the messaging applications.
 ```
 
 ```{r}
@@ -82,7 +82,7 @@ PE_all
 #Getting the mean and Standard Deviation
 EE_meanstd <- messRespon %>%
   summarise(
-    Factors = c("EOU3", "EOU5", "EOU6", "EU4"),
+    Code = c("EOU3", "EOU5", "EOU6", "EU4"),
     Mean = c(
       mean(X5..My.interaction.with.the.messaging.system.is..clear.and.understandable.),
       mean(X6..It.is.easy.for.me.to.become.skillful.at.using.the.messaging.system.),
@@ -96,8 +96,8 @@ EE_meanstd <- messRespon %>%
       sd(X8..Learning.to.operate.the.messaging.system.is.easy.for.me.)
     )
    ) %>%
-  mutate(Questionnaire_Type = "Effort Expectancy") %>%
-  select(Questionnaire_Type,Factors, Mean, Standard_Dev)
+  mutate(Factors = "Effort Expectancy") %>%
+  select(Factors, Code, Mean, Standard_Dev)
 
 TotalresultEE <- EE_meanstd %>%
   summarise(Mean = mean(Mean),
@@ -108,9 +108,9 @@ EE_all<- bind_rows(EE_meanstd, TotalresultEE)
 EE_all[5, 1] <- "EFFORT EXPECTANCY"
 EE_all[5, 2] <-  "TOTAL"
 View(EE_all)
+#Viewing of the 2nd subset: The Effort Expectancy
 EE_all
-
-#INSIGHTS: The data shows that on average, participants rated "Effort Expectancy" between 4.28 and 4.70, indicating a generally high ease of use across different factors. The consistency in these ratings is highlighted by a moderate range of standard deviations (0.69 to 0.94), suggesting that most participants felt similarly about the ease of use.
+#DESCRIPTION: The Effort Expectancy's EOU6 has the highest average in the questionnaire in which it states that the user/s find the system easy to use, or rather, a user-friendly system for everyone. Even though the system is a user-friendly one, it is still a handy one to become skillful at using system. 
 ```
 
 ```{r}
@@ -125,7 +125,7 @@ EE_all
 #Getting the mean and standard deviation
 SI_meanstd <- messRespon  %>%
   summarise(
-    Factors = c("SN1", "SN2","SF2","SF4"),
+    Code = c("SN1", "SN2","SF2","SF4"),
     Mean = c(
       mean(X13..People.who.influence.my.behavior.think.that.I.should.use.the.messaging.system.),
       mean(X14...People.who.are.important.to.me.think.that.I.should.use.the.messaging.system.),
@@ -139,8 +139,8 @@ SI_meanstd <- messRespon  %>%
       sd(X16..In.general..the.organization.has.supported.the.use.of.the.messaging.system.)
     )
   ) %>%
-  mutate(Questionnaire_Type = "Social Influence") %>%
-  select(Questionnaire_Type, Factors, Mean, Standard_Dev)
+  mutate(Factors = "Social Influence") %>%
+  select(Factors,Code, Mean, Standard_Dev)
 
 TotalresultSI <- SI_meanstd %>%
   summarise(Mean = mean(Mean),
@@ -151,9 +151,10 @@ SI_all<- bind_rows(SI_meanstd, TotalresultSI)
 SI_all[5, 1] <- "SOCIAL INFLUENCE"
 SI_all[5, 2] <-  "TOTAL"
 View(SI_all)
-SI_all
 
-#INSIGHTS: The data shows that the average scores for different aspects of Social Influence are all above 3.85, with 'SF4' scoring the highest average at 4.41. The overall average for Social Influence is 4.17, indicating a strong influence, with a consistent standard deviation around 0.88, suggesting moderate variability in responses.
+#Viewing of the 3rd subset: Social Influence
+SI_all
+#DESCRIPTION: The SN1 questionnaire has the lowest mean in which states that the users aren't influenced to use the system. Overall, the organization has supported the use of the system. To conclude, the users used the messaging applications in their own influence.  
 ```
 ```{r}
 #FACTOR: FACILITATING CONDITIONS
@@ -167,7 +168,7 @@ SI_all
 #Getting the mean and standard deviation
 FC_meanstd <- messRespon  %>%
   summarise(
-    Factors = c("SN1", "SN2","SF2","SF4"),
+    Code = c("PBC2", "PBC3","PBC5","FC3"),
     Mean = c(
       mean(X17...I.have.the.resources.necessary.to.use.the.messaging.system.),
       mean(X18..I.have.the.knowledge.necessary.to.use.the.messaging.system.),
@@ -181,75 +182,80 @@ FC_meanstd <- messRespon  %>%
       sd(X20...A.specific.person..or.group..is.available.for.assistance.with.messaging.system.difficulties.)
     )
   ) %>%
-  mutate(Questionnaire_Type = "Facilitating Conditions") %>%
-  select(Questionnaire_Type, Factors, Mean, Standard_Dev)
+  mutate(Factors = "Facilitating Conditions") %>%
+  select(Factors, Code, Mean, Standard_Dev)
 
 TotalresultFC <- FC_meanstd %>%
   summarise(Mean = mean(Mean),
             Standard_Dev = mean(Standard_Dev),
   )
 
-FC_all<- bind_rows(FC_meanstd, TotalresultSI)
+FC_all<- bind_rows(FC_meanstd, TotalresultFC)
 FC_all[5, 1] <- "FACILITATING CONDITIONS"
 FC_all[5, 2] <-  "TOTAL"
 View(FC_all)
+
+#Viewing of the 4th subset: Facilitating Conditions
 FC_all
-
-#INSIGHTS: This result from RStudio indicates that respondents perceive high facilitating conditions overall, with particularly strong ratings for SN2. However, SF2 received lower scores, suggesting room for improvement in certain factors influencing facilitation.
-```
-```{r}
-#FACTOR: BEHAVIORAL INTENTION TO USE THE SYSTEM 
-
-#Behavioral Intention Questionnaire
-#X29...I.intend.to.use.the.messaging.system.in.the.future.
-#X30...I.predict.I.would.use.the.messaging.system.in.the.future.
-#X31...I.plan.to.use.the.messaging.system.in.the.next.future. 
-
-#Getting the mean and standard deviation
-
-BI_meanstd <- messRespon %>%
-  summarise(
-    Factors = c("BI1", "BI2", "BI3"),
-    Mean = c(
-      mean(X29...I.intend.to.use.the.messaging.system.in.the.future.),
-      mean(X30...I.predict.I.would.use.the.messaging.system.in.the.future.),
-      mean(X31...I.plan.to.use.the.messaging.system.in.the.next.future.)
-    ),
-    Standard_Dev = c(
-      sd(X29...I.intend.to.use.the.messaging.system.in.the.future.),
-      sd(X30...I.predict.I.would.use.the.messaging.system.in.the.future.),
-      sd(X31...I.plan.to.use.the.messaging.system.in.the.next.future.)
-    )
-  ) %>%
-  mutate(Questionnaire_Type = "Behavioral Intention") %>%
-  select(Questionnaire_Type,Factors, Mean, Standard_Dev)
-
-TotalresultBI <- BI_meanstd %>%
-  summarise(Mean = mean(Mean),
-            Standard_Dev = mean(Standard_Dev),
-  )
-BI_all<- bind_rows(BI_meanstd, TotalresultBI)
-BI_all[4, 1] <- "BEHAVIORAL INTENTION"
-BI_all[4, 2] <-  "TOTAL"
-View(BI_all)
-BI_all
-
-#INSIGHTS: This result, analyzed through RStudio, indicates that the overall behavioral intention score is high, with a mean of 4.43 and a standard deviation of 0.87, suggesting strong behavioral inclinations among participants across various factors.
+#DESCRIPTION: The PBC5 garnered a positive results as the it has the lowest mean among the four, as it states that the user finds the messaging applications compatible to other systems. On the other hand, the user has a knowledge to use a system. 
 ```
 
 ```{r}
-final_combined_data <- bind_rows(PE_all, EE_all, SI_all, FC_all, BI_all)
-View(final_combined_data)
+#Combining all the factors to acquire the Behavioral Intention 
 
-overall <- final_combined_data %>%
+#THE BEHAVIORAL INTENTION OF THE DETERMINANTS
+
+#Binding all the factors, codes, mean, and standard deviation of each of the determinants. 
+
+behavioral_com_data<- bind_rows(PE_all, EE_all, SI_all, FC_all)
+View(behavioral_com_data)
+
+#Getting all the overall mean and standard deviation. 
+overall <- behavioral_com_data%>%
   summarise(Mean = mean(Mean),
             Standard_Dev = mean(Standard_Dev),
   )
- 
-stats_overall<- bind_rows(final_combined_data, overall)
-stats_overall[25, 1] <- "OVERALL RESULT"
-stats_overall[25, 2] <-  "OVERALL SUMMARY"
-View(stats_overall)
-stats_overall
-#INSIGHTS: These results from RStudio indicate that overall, participants rated performance expectancy and effort expectancy highly, with social influence and facilitating conditions also playing significant roles in their behavioral intentions, suggesting a favorable outlook for the studied factors.
+
+#Creating a table of accumulated data
+behavioral_intention_final<-bind_rows(behavioral_com_data, overall)
+behavioral_intention_final[21, 1] <- "BEHAVIORAL INTENTION"
+behavioral_intention_final[21, 2] <- "TOTAL"
+View(behavioral_intention_final)
+behavioral_intention_final
+
+```
+
+```{r}
+#TABLE FOR THE OVERALL RESULTS
+#Creating a table for all the results of all the factors. 
+PE<-behavioral_intention_final[5, 2:4]
+EE<-behavioral_intention_final[10, 2:4]
+SI<-behavioral_intention_final[15, 2:4]
+FC<-behavioral_intention_final[20, 2:4]
+total<-behavioral_intention_final[21, 2:4]
+
+Overall_deter<-bind_rows(PE, EE, SI, FC, total)
+
+#Renaming the Column
+Overall_deter[1,1]<-"PE"
+Overall_deter[2,1]<-"EE"
+Overall_deter[3,1]<-"SI"
+Overall_deter[4,1]<-"FC"
+
+View(Overall_deter)
+Overall_deter
+
+
+#Add Description column
+Description <- c("Performance Expectancy", "Effort Expectancy", "Social Influence", "Facilitating Conditions", "TOTAL")
+#Mutating the description column and renaming the title of the column. 
+Overall_deter <- Overall_deter%>%
+  mutate(Description = Description)%>%
+  select(Code, Description, everything())%>%
+  rename(Mean_SD = Standard_Dev)
+
+View(Overall_deter)
+Overall_deter
+
+#DESCRIPTION: In this table, we collected all of the accumulated mean and standard deviation of every factors and getting the total mean and total mean of the standard deviation. In conclusion, the data suggests a promising inclination towards system adoption, emphasizing the importance of addressing barriers to facilitate a smoother user experience.
 ```
