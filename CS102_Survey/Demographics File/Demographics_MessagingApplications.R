@@ -2,13 +2,16 @@ library(readr)
 library(dplyr)
 library(tidyr)
 
-messRespon<-read.csv('/cloud/project/CS102_Survey/RESPONDENTS.csv')
+messRespon<-read.csv('C:/Users/User/Documents/Rstudio Files/midtermsurvey/FINAL EXCEL/RESPONDENTS.csv')
 
-                            #GRAPHING DEMOGRAPHICS UTILIZED IN THE SURVEY
+                  #GRAPHING DEMOGRAPHICS UTILIZED IN THE SURVEY
 
 #DEMOGRAPHIC: Age
 age_freq<-table(messRespon$Age)
+
+#Viewing of the frequency of the ages
 age_freq
+
 percentages <- round((age_freq / sum(age_freq)) * 100, 1)
 pie(age_freq, 
     main = "Respondents by Age",
@@ -21,10 +24,13 @@ legend("bottomleft", legend = legend_labels, bty = "n", cex = 0.8, fill = rainbo
 
 #DEMOGRAPHIC:Gender 
 gender_freq <- table(messRespon$Gender)
+
+#Viewing of the frequency of the sex
 gender_freq
+
 percentages <- round((gender_freq / sum(gender_freq)) * 100, 1)
 pie(gender_freq, 
-    main = "Respondents by Gender",
+    main = "Respondents by Sex",
     col = rainbow(length(gender_freq)),
     labels = paste("", format(percentages, nsmall = 1, digits = 2), "%"),
     cex = 0.6,
@@ -35,7 +41,10 @@ legend("bottomleft", legend = legend_labels, bty = "n", cex = 0.8, fill = rainbo
 
 #DEMOGRAPHIC:Type of Community
 community_freq <- table(messRespon$Type.of.community)
+
+#Viewing of the frequency of the community types
 community_freq
+
 percentages <- round((community_freq / sum(community_freq)) * 100, 1)
 pie(community_freq, 
     main = "Respondents by Type of Community",
@@ -46,20 +55,45 @@ pie(community_freq,
 legend_labels <- paste(names(community_freq))
 legend("bottomleft", legend = legend_labels, bty = "n", cex = 0.8, fill = rainbow(length(community_freq)))
 
+
 #DEMOGRAPHIC:College
 college_freq <- table(messRespon$College)
+
+#Viewing of the frequency of the colleges (before transforming)
 college_freq
+
+single_respondent_colleges <- names(college_freq[college_freq == 1])
+single_respondent_colleges
+
+messRespon$College[messRespon$College %in% single_respondent_colleges] <- "Others"
+
+college_freq <- table(messRespon$College)
+
+#Viewing of the frequency of the colleges (after transforming)
+college_freq
+
 percentages <- round((college_freq / sum(college_freq)) * 100, 1)
-pie(college_freq, 
+
+pie_data <- college_freq
+others_index <- "Others"
+if (others_index %in% names(pie_data)) {
+  pie_data[others_index] <- sum(pie_data[pie_data < 2])
+  pie_data <- pie_data[pie_data >= 2]
+}
+
+pie(pie_data,
     main = "Respondents by College",
-    col = rainbow(length(college_freq)),
-    labels = paste("", format(percentages, nsmall = 1, digits = 2), "%"),
-    cex = 0.6,
-)
-legend_labels <- paste(names(college_freq))
-legend("bottomleft", legend = legend_labels, bty = "n", cex = 0.5, fill = rainbow(length(college_freq)))
+    col = rainbow(length(pie_data)),
+    labels = paste("", format(percentages[pie_data >= 2], nsmall = 1, digits = 2), "%"),
+    cex = 0.7)
+
+legend_labels <- names(pie_data)
+legend("topleft", legend = c(legend_labels, "Others"), bty = "n", cex = 0.6, fill = rainbow(length(pie_data) + 1))
+
 
 #DEMOGRAPHIC: Courses
+
+#As our data for courses are mixed, we first transform it by lowercasing the texts. 
 
 corrected_courses <- tolower(messRespon$Course)
 
@@ -93,28 +127,50 @@ valid_courses <- c(
   "bachelor of science in pharmacy"
 )
 
-corrected_courses <- sapply(corrected_courses, function(course) {
-  closest_match <- valid_courses[agrep(tolower(course), tolower(valid_courses), ignore.case = TRUE, max.distance = 0.1)]
-  if (length(closest_match) == 0) {
-    course  
-  } else {
-    closest_match[1]  
-  }
-})
 
-corrected_courses
+find_closest_match <- function(course) {
+  distances <- sapply(valid_courses, function(valid_course) {
+    sum(tolower(course) != tolower(valid_course))
+  })
+  closest_index <- which.min(distances)
+  if (distances[closest_index] > 2) {
+    return(course)
+  } else {
+    return(valid_courses[closest_index])
+  }
+}
+
+corrected_courses <- sapply(corrected_courses, find_closest_match)
+
+
 course_freq <- table(corrected_courses)
+single_respondent_courses <- names(course_freq[course_freq == 1])
+corrected_courses[corrected_courses %in% single_respondent_courses] <- "Others"
+course_freq <- table(corrected_courses)
+
+course_freq <- course_freq[order(-course_freq)]
+
+#Viewing of the frequency of the courses
 course_freq
+
 percentages <- round((course_freq / sum(course_freq)) * 100, 1)
 
-pie(course_freq, 
+pie_data <- course_freq
+others_index <- "Others"
+if (others_index %in% names(pie_data)) {
+  pie_data[others_index] <- sum(pie_data[pie_data < 2])
+  pie_data <- pie_data[pie_data >= 2]
+}
+
+pie(pie_data, 
     main = "Respondents by Courses",
-    col = rainbow(length(course_freq)),
-    labels = paste("", format(percentages, nsmall = 1, digits = 2), "%"),
-    cex = 0.5,
-)
-legend_labels <- paste(names(course_freq))
-legend("bottomleft", legend = legend_labels, bty = "n", cex = 0.5, fill = rainbow(length(course_freq)))
+    col = rainbow(length(pie_data)),
+    labels = paste("", format(percentages[pie_data >= 2], nsmall = 1, digits = 2), "%"),
+    cex = 0.8)
+
+legend_labels <- names(pie_data)
+legend("topleft", legend = c(legend_labels, "Others"), bty = "n", cex = 0.7, fill = rainbow(length(pie_data) + 1))
+
 
 #DEMOGRAPHIC:By Year Level
 yearlvl_freq <- table(messRespon$Year.Level)
@@ -125,6 +181,8 @@ yearlvl_freq <- yearlvl_freq[!names(yearlvl_freq) %in% "1st  Year"]
 
 percentages <- round((yearlvl_freq / sum(yearlvl_freq)) * 100, 1)
 
+#Viewing of the frequency of the number of the year level.
+yearlvl_freq
 
 barplot(as.vector(yearlvl_freq), 
         main = "Respondents by Year Level",
@@ -143,6 +201,10 @@ text(x = barplot(as.vector(yearlvl_freq), plot = FALSE),
 
 #DEMOGRAPHIC:Application used in messaging
 messagingapp_freq <- table(messRespon$Which.messaging.app.do.you.use.most.frequently.)
+
+#Viewing of the frequency of the applications used in messaging
+messagingapp_freq
+
 percentages <- round((messagingapp_freq / sum(messagingapp_freq)) * 100, 1)
 
 
@@ -159,8 +221,12 @@ barplot(messagingapp_freq,
 
 text(x = 1:length(messagingapp_freq), y = messagingapp_freq, labels = paste0(percentages, "%"), pos = 3, cex = 0.8, col = "black")
 
+
+
 #DEMOGRAPHIC:Frequency of usage using messaging apps
 usage_length <- table(messRespon$How.often.do.you.use.messaging.apps.)
+
+#Viewing of the frequency of the usage length.
 usage_length
 
 percentages <- round(prop.table(usage_length) * 100, 2)
@@ -180,8 +246,11 @@ barplot(usage_length,
 
 text(x = 1:length(usage_length), y = usage_length, labels = paste0(percentages, "%"), pos = 3, cex = 0.8, col = "black")
 
+
 #DEMOGRAPHIC:How long have you been using the messaging app?
 usage_length <- table(messRespon$How.long.have.you.been.using.messaging.apps.)
+
+#Viewing of the frequency of the usage of the messaging app
 usage_length
 
 percentages <- round(prop.table(usage_length) * 100, 2)
@@ -199,6 +268,10 @@ barplot(usage_length,
 
 #DEMOGRAPHIC: Device used for messaging
 device_type <- table(messRespon$What.type.of.device.do.you.primarily.use.for.messaging.)
+
+#Viewing of the frequency of the devices used. 
+device_type
+
 percentages <- round(prop.table(device_type) * 100, 2)
 
 
@@ -215,5 +288,4 @@ barplot(device_type,
 
 
 text(x = 1:length(device_type), y = device_type, labels = paste0(percentages, "%"), pos = 3, cex = 0.8, col = "black")
-
 
