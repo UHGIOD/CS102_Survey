@@ -17,7 +17,7 @@ library(tidyr)
 ```
 ```{r}
 #Reading the file from csv for easy navigation. 
-messRespon<-read.csv('C:/Users/User/Documents/Rstudio Files/midtermsurvey/FINAL EXCEL/RESPONDENTS.csv')
+messRespon<-read.csv('/cloud/project/CS102_Survey/RESPONDENTS.csv')
 ```
 
 ```{r}
